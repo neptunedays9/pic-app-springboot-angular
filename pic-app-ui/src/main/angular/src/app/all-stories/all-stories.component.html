@@ -1,0 +1,39 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Simple Table</h4>
+                      <p class="card-category"> Here is a subtitle for this table</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <thead class=" text-primary">
+                                <th *ngFor="let col of columns">
+                                    {{col}}
+                                </th>
+                              </thead>
+                              <tbody>
+                                  <tr *ngFor="let dat of data">
+                                    <td>
+                                      {{dat.id}}
+                                    </td>
+                                    <td>
+                                      {{dat.title}}
+                                    </td>
+                                    <td>
+                                      {{dat.author}}
+                                    </td>
+                                    <td><button class="tbl-btn btn-primary" (click)="viewClicked(dat.id)">View</button></td>
+                                   </tr>
+                                </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
