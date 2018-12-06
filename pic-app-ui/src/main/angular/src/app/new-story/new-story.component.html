@@ -1,0 +1,31 @@
+<div class="main-content">
+  <div id="editor">
+    <div id="container" #picCanvas></div>
+    <form name="myForm" ng-controller="ExampleController">
+
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Title" value={{storytitle}} [(ngModel)]="storytitle" name="storytitle">
+      </mat-form-field>
+    </form>
+      <form name="myForm1" ng-controller="ExampleController">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="SceneStory" value={{scenestory}} [(ngModel)]="scenestory" name="scenestory">
+      </mat-form-field>
+
+    </form>
+    <!-- <td><button class="tbl-btn btn-primary" (click)="loadCanvas()">Load</button></td> -->
+    <td><button class="tbl-btn btn-primary" (click)="saveClicked()">Save</button></td>
+    <td><button class="tbl-btn btn-primary" (click)="cancelClicked()">Cancel</button></td>
+    <!-- <td><button class="tbl-btn btn-primary" (click)="testCanvas()">Test</button></td> -->
+  </div>
+  <div id="imagescroll">
+    <div class="column">
+      <div class="carousel-inner" *ngFor="let element of elements">
+          <div class="item">
+              <img src="{{element.src}}" alt="Los Angeles" style="width:100%;" (click)="addElement(element)"/>
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>
