@@ -14,7 +14,7 @@ import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS  } from '@ang
 import { MatFormFieldModule, MatInputModule, MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatCardModule } from '@angular/material';
 import { AllStoriesComponent } from './all-stories/all-stories.component';
 import { NewStoryComponent } from './new-story/new-story.component';
-import { LoginComponent } from './login/login.component';
+import { SigninComponent } from './signin/signin.component';
 import { AboutComponent } from './about/about.component';
 
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -41,7 +41,7 @@ import { HttpXsrfInterceptor } from './app-interceptor';
     MyNavComponent,
     AllStoriesComponent,
     NewStoryComponent,
-    LoginComponent,
+    SigninComponent,
     AboutComponent,
     PageNotFoundComponent
   ],
