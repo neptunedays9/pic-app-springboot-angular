@@ -60,6 +60,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.filter.CompositeFilter;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
@@ -83,6 +84,7 @@ import java.util.UUID;
 @RestController
 @EnableOAuth2Client
 @EnableAuthorizationServer
+@EnableWebSecurity
 @Order(200)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -101,12 +103,25 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     RequestHelper requestHelper;
 
-    @RequestMapping({ "/user", "/me" })
-    public String user(Principal principal) {
+    @Autowired
+    CustomOAuth2UserService customOAuth2UserService;
+
+    @RequestMapping("/username")
+    public String username(Principal principal) {
         //Map<String, String> map = new LinkedHashMap<>();
         //map.put("name", principal.getName());
         //System.out.println("TEST ******************** " + principal.getName());
         return principal.getName();
+    }
+
+    @RequestMapping("/useremail")
+    public String useremail(Principal principal) {
+        return principal.getName();
+    }
+
+    @RequestMapping("/user")
+    public Principal user(Principal principal) {
+        return principal;
     }
 
     @GetMapping("/resource")
@@ -144,21 +159,29 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
-        http.antMatcher("/**").authorizeRequests()
-                .antMatchers("/", "/user**", "/me**", "/login**", "/webjars/**")
-                .permitAll().anyRequest()
-                .authenticated().and()
+        http.antMatcher("/**")
+                .authorizeRequests()
+                    .antMatchers("/","/*.js","/index.html", "/signin**", "/user**", "/login**", "/webjars/**", "/error**").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/")).and()
+                    .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
+                    .and()
                 .formLogin()
-                .successHandler(new ForwardAuthenticationSuccessHandler("/session"))
-                .and()
+                    .successHandler(new ForwardAuthenticationSuccessHandler("/session"))
+                    .and()
                 .logout()
-                .logoutSuccessUrl("/").permitAll()
-                .and()
+                    .logoutSuccessUrl("/").permitAll()
+                    .and()
                 .csrf()
-                .csrfTokenRepository(this.getCsrfTokenRepository())
-                .and()
+                    .csrfTokenRepository(this.getCsrfTokenRepository())
+                    .and()
+//                .oauth2Login()
+//                    .userInfoEndpoint()
+//                        .userService(customOAuth2UserService)
+//                        .and()
+//                    .successHandler(new ForwardAuthenticationSuccessHandler("/session"))
+//                    .and()
                 .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
         // @formatter:on
         System.out.println("PICAPP ******************** 2");
@@ -185,13 +208,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         }
     }
 
-    @Bean
-    public FilterRegistrationBean<OAuth2ClientContextFilter> oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
-        FilterRegistrationBean<OAuth2ClientContextFilter> registration = new FilterRegistrationBean<OAuth2ClientContextFilter>();
-        registration.setFilter(filter);
-        registration.setOrder(-100);
-        return registration;
-    }
+//    @Bean
+//    public FilterRegistrationBean<OAuth2ClientContextFilter> oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
+//        FilterRegistrationBean<OAuth2ClientContextFilter> registration = new FilterRegistrationBean<OAuth2ClientContextFilter>();
+//        registration.setFilter(filter);
+//        registration.setOrder(-100);
+//        return registration;
+//    }
 
     @Bean
     @ConfigurationProperties("github")
@@ -204,6 +227,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public ClientResources facebook() {
         return new ClientResources();
     }
+
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public CommonsRequestLoggingFilter requestLoggingFilter() {
@@ -232,27 +258,27 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 client.getResource().getUserInfoUri(), client.getClient().getClientId());
         tokenServices.setRestTemplate(template);
         filter.setTokenServices(tokenServices);
-//        filter.setAuthenticationSuccessHandler(new SavedRequestAwareAuthenticationSuccessHandler());
+        //filter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler);
         return filter;
     }
 
-    private Filter oauthFilter() {
-        OAuth2ClientAuthenticationProcessingFilter oauthFilter = new OAuth2ClientAuthenticationProcessingFilter("/login");
-        OAuth2RestTemplate oauthTemplate = new OAuth2RestTemplate(resource, oauth2ClientContext);
-        OAuth2AccessTokenSupport authAccessProvider = new AuthorizationCodeAccessTokenProvider();
-        // Set request factory for '/oauth/token'
-        authAccessProvider.setRequestFactory(requestHelper.getRequestFactory());
-        AccessTokenProvider accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(
-                (AuthorizationCodeAccessTokenProvider)authAccessProvider));
-        oauthTemplate.setAccessTokenProvider(accessTokenProvider);
-        // Set request factory for '/userinfo'
-        oauthTemplate.setRequestFactory(requestHelper.getRequestFactory());
-        oauthFilter.setRestTemplate(oauthTemplate);
-        UserInfoTokenServices userInfoTokenService = new UserInfoTokenServices(resourceServer.getUserInfoUri(), resource.getClientId());
-        userInfoTokenService.setRestTemplate(oauthTemplate);
-        oauthFilter.setTokenServices(userInfoTokenService);
-        return oauthFilter;
-    }
+//    private Filter oauthFilter() {
+//        OAuth2ClientAuthenticationProcessingFilter oauthFilter = new OAuth2ClientAuthenticationProcessingFilter("/login");
+//        OAuth2RestTemplate oauthTemplate = new OAuth2RestTemplate(resource, oauth2ClientContext);
+//        OAuth2AccessTokenSupport authAccessProvider = new AuthorizationCodeAccessTokenProvider();
+//        // Set request factory for '/oauth/token'
+//        authAccessProvider.setRequestFactory(requestHelper.getRequestFactory());
+//        AccessTokenProvider accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(
+//                (AuthorizationCodeAccessTokenProvider)authAccessProvider));
+//        oauthTemplate.setAccessTokenProvider(accessTokenProvider);
+//        // Set request factory for '/userinfo'
+//        oauthTemplate.setRequestFactory(requestHelper.getRequestFactory());
+//        oauthFilter.setRestTemplate(oauthTemplate);
+//        UserInfoTokenServices userInfoTokenService = new UserInfoTokenServices(resourceServer.getUserInfoUri(), resource.getClientId());
+//        userInfoTokenService.setRestTemplate(oauthTemplate);
+//        oauthFilter.setTokenServices(userInfoTokenService);
+//        return oauthFilter;
+//    }
 }
 
 class ClientResources {
