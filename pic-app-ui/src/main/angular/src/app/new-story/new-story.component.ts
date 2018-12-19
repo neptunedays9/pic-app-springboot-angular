@@ -3,12 +3,13 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 //import * as Konva from 'konva';
 import * as Konva from 'konva/konva';
-import { ELEMENTS, Scene, Element } from './element';
+import { ELEMENTS, MAN, WOMAN, CHILD, FAMILY, ANIMAL, PLACE, FOOD, FURNITURE, Scene, Element } from './element';
 //import {Http, Response} from '@angular/http';
 import { HttpClient, HttpHeaders, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { StoryInfoService } from '../storyinfo.service';
 import { StoryService } from '../story.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-new-story',
@@ -25,15 +26,22 @@ export class NewStoryComponent implements OnInit {
   picstage : any;
 
   elements = ELEMENTS;
+  man = MAN;
+  woman = WOMAN;
+  child = CHILD;
+  family = FAMILY;
+  animal = ANIMAL;
+  place = PLACE;
+  food = FOOD;
+  furniture = FURNITURE;
 
   scenes : Scene [] ;
 
   storytitle = "A day in ...";
   scenestory = "A bright sunny day ...";
   //email = "pqr@pqr";
-  email:any = "pqr@pqr";
-
-  emailApiUrl = 'http://localhost:8080/user';
+  useremail:any = "pqr@pqr";
+  username:any = "pqr";
 
   baseUrl = 'http://localhost:8080/login';
   storyUrl = 'http://localhost:8080/story';
@@ -43,7 +51,8 @@ export class NewStoryComponent implements OnInit {
   token:string;
 
   //functions
-  constructor(private http: HttpClient, private storyinfo: StoryInfoService, private storyService:StoryService) {
+  constructor(private http: HttpClient, private storyinfoservice: StoryInfoService,
+    private storyService:StoryService, private userservice:UserService ) {
     //this.token = this.tokenExtractor.getToken() as string;
   }
   private id: any;
@@ -99,7 +108,7 @@ export class NewStoryComponent implements OnInit {
 
       console.log("in ngOnInit");
 
-      this.storyinfo.getId().subscribe(id => this.id = id);
+      this.storyinfoservice.getId().subscribe(id => this.id = id);
       console.log("in ngOnInit with Id: ", this.id);
 
       //if the user already selected a story to edit
@@ -259,15 +268,25 @@ export class NewStoryComponent implements OnInit {
       this.scenes = [new Scene(this.scenestory, scene1picstage)];
 
       //get the logged in user email in email field
-      this.getEmail();
+      this.userservice.getUserEmail().subscribe(data=> {
+        console.log("this.userservice.getUserEmail().subscribe");
+        console.log(data);
+        this.useremail = data;
+      });
 
-      console.log("Email:" + this.email);
+      this.userservice.getUserName().subscribe(data=> {
+        console.log("this.userservice.getUserName().subscribe");
+        console.log(data);
+        this.username = data;
+      });
+
+      console.log("Email:" + this.useremail);
       console.log("Title:" + this.storytitle);
       console.log("SceneStory:" + this.scenestory);
 
       const storyObj = {
         title: this.storytitle,
-        email: this.email,
+        email: this.useremail,
         scenes: this.scenes
       };
 
@@ -297,18 +316,6 @@ export class NewStoryComponent implements OnInit {
       //this.http.post<string>(this.apiUrl, storyStr);
     }
 
-    getEmailApi() {
-      return this.http.get(this.emailApiUrl).map((res: Response) => res.json())
-    }
-
-    getEmail()
-    {
-      this.getEmailApi().subscribe(data=> {
-        console.log(data);
-        this.email = data;
-      })
-    }
-
     sendStory(article: string): Observable<string> {
       console.log("In sendStory");
       //return this.http.post<string>(this.apiUrl, article);
@@ -319,11 +326,11 @@ export class NewStoryComponent implements OnInit {
     }
 
     updateStory(article: string): Observable<string> {
-      console.log("In sendStory");
+      console.log("In updateStory");
       //return this.http.post<string>(this.apiUrl, article);
       return this.http.post<string>(this.singleStoryUrl + "/" + this.id, article, this.httpOptions)
       .pipe(
-        catchError(this.handleError('sendStory', article))
+        catchError(this.handleError('updateStory', article))
       );
     }
 

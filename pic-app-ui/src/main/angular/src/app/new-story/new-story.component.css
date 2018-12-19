@@ -8,19 +8,21 @@
   }
 
 #container{
-  width:'400';
+  width: 100%;
+  /* width:'400'; */
   height:'400';
   background-color: #f7f7f7;
-    float: left;
+  background: white;
+  float: left;
 }
 #editor {
-    width: 85%;
+    width: 90%;
     height: 300px;
-    background: white;
+    background: green;
     float: left;
 }
 #imagescroll {
-    margin-left: 15%;
+    margin-left: 10%;
     height: 400px;
     background: grey;
     overflow-y: scroll

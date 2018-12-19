@@ -31,9 +31,33 @@
 	</build>
 	<dependencies>
 		<!-- ... other dependency elements ... -->
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<!-- https://mvnrepository.com/artifact/org.refcodes/refcodes-security -->
 		<!-- https://mvnrepository.com/artifact/org.springframework.security.oauth.boot/spring-security-oauth2-autoconfigure -->
 		<!-- Use MySQL Connector-J -->
+		<dependency>
+			<artifactId>
+				commons-collections4
+			</artifactId>
+			<groupId>
+				org.apache.commons
+			</groupId>
+			<version>
+				4.1
+			</version>
+		</dependency>
+		<dependency>
+			<artifactId>
+				httpclient
+			</artifactId>
+			<groupId>
+				org.apache.httpcomponents
+			</groupId>
+			<version>
+				4.5.4
+			</version>
+		</dependency>
 		<dependency>
 			<artifactId>
 				lombok
@@ -68,6 +92,17 @@
 			</scope>
 			<version>
 				${project.version}
+			</version>
+		</dependency>
+		<dependency>
+			<artifactId>
+				refcodes-security
+			</artifactId>
+			<groupId>
+				org.refcodes
+			</groupId>
+			<version>
+				1.2.6
 			</version>
 		</dependency>
 		<dependency>
@@ -148,21 +183,7 @@
 				org.springframework.security
 			</groupId>
 		</dependency>
-        <!-- https://mvnrepository.com/artifact/org.refcodes/refcodes-security -->
-        <dependency>
-            <groupId>org.refcodes</groupId>
-            <artifactId>refcodes-security</artifactId>
-            <version>1.2.6</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.4</version>
-        </dependency>
-
-
-    </dependencies>
+	</dependencies>
 	<description>
 		pic app server
 	</description>

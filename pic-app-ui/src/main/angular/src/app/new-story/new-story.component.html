@@ -7,7 +7,7 @@
         <input matInput placeholder="Title" value={{storytitle}} [(ngModel)]="storytitle" name="storytitle">
       </mat-form-field>
     </form>
-      <form name="myForm1" ng-controller="ExampleController">
+    <form name="myForm1" ng-controller="ExampleController">
       <mat-form-field class="example-full-width">
         <input matInput placeholder="SceneStory" value={{scenestory}} [(ngModel)]="scenestory" name="scenestory">
       </mat-form-field>
@@ -19,13 +19,117 @@
     <!-- <td><button class="tbl-btn btn-primary" (click)="testCanvas()">Test</button></td> -->
   </div>
   <div id="imagescroll">
-    <div class="column">
-      <div class="carousel-inner" *ngFor="let element of elements">
-          <div class="item">
-              <img src="{{element.src}}" alt="Los Angeles" style="width:100%;" (click)="addElement(element)"/>
-          </div>
-      </div>
-
-    </div>
+    <!-- <div class="column">
+    <div class="carousel-inner" *ngFor="let element of elements">
+    <div class="item">
+    <img src="{{element.src}}" alt="Los Angeles" style="width:100%;" (click)="addElement(element)"/>
   </div>
+</div>
+
+</div> -->
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Woman
+    </mat-panel-title>
+    <mat-panel-description>
+      </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-card-content *ngFor="let element of woman" class="dashboard-card-content">
+    <img src="{{element.src}}" (click)="addElement(element)">
+  </mat-card-content>
+
+</mat-expansion-panel>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Man
+    </mat-panel-title>
+    <mat-panel-description>
+      </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-card-content *ngFor="let element of man" class="dashboard-card-content">
+    <img src="{{element.src}}" (click)="addElement(element)">
+  </mat-card-content>
+
+</mat-expansion-panel>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Child
+    </mat-panel-title>
+    <mat-panel-description>
+      </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-card-content *ngFor="let element of child" class="dashboard-card-content">
+    <img src="{{element.src}}" (click)="addElement(element)">
+  </mat-card-content>
+
+</mat-expansion-panel>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Family
+    </mat-panel-title>
+    <mat-panel-description>
+      </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-card-content *ngFor="let element of family" class="dashboard-card-content">
+    <img src="{{element.src}}" (click)="addElement(element)">
+  </mat-card-content>
+
+</mat-expansion-panel>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Animal
+    </mat-panel-title>
+    <mat-panel-description>
+      </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-card-content *ngFor="let element of animal" class="dashboard-card-content">
+    <img src="{{element.src}}" (click)="addElement(element)">
+  </mat-card-content>
+
+</mat-expansion-panel>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Place
+    </mat-panel-title>
+    <mat-panel-description>
+      </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-card-content *ngFor="let element of place" class="dashboard-card-content">
+    <img src="{{element.src}}" (click)="addElement(element)">
+  </mat-card-content>
+
+</mat-expansion-panel>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Food
+    </mat-panel-title>
+    <mat-panel-description>
+      </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-card-content *ngFor="let element of food" class="dashboard-card-content">
+    <img src="{{element.src}}" (click)="addElement(element)">
+  </mat-card-content>
+
+</mat-expansion-panel>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      FURNITURE
+    </mat-panel-title>
+    <mat-panel-description>
+      </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-card-content *ngFor="let element of furniture" class="dashboard-card-content">
+    <img src="{{element.src}}" (click)="addElement(element)">
+  </mat-card-content>
+
+</mat-expansion-panel>
+</div>
 </div>
