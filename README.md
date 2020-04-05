@@ -11,6 +11,7 @@ User can add scene with pictures and text to convey their story.
 * Option to analyse the text and classify the story into catgeories like motivational / comedy / kids etc
 
 
+
 ## Application
 build the application with:
 ```bash
